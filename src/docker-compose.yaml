@@ -1,11 +1,11 @@
-version: 3.7
 services:
   bench_test:
     build: .
-    ports: "10000:80"
+    ports: 
+      - "1000"
     networks: 
       logger_net:
-        "192.168.92.20"
+        ipv4_address: "192.168.92.20"
     restart: unless-stopped
     depends_on:
       - fluent-bit 
@@ -14,12 +14,13 @@ services:
     volumes: 
       - ./fluent-bit.yaml:/fluent-bit/etc/fluent-bit.yaml
       - ./parsers.yaml:/fluent-bit/etc/parsers.yaml
-      - ./logger/vllm.log: vllm.log
+      - ./logger/vllm.log:/var/log/vllm.log
     networks: 
       logger_net:
-        "192.168.92.35"
-  networks: 
-    logger_net:
+        ipv4_address: "192.168.92.21"
+networks: 
+  logger_net:
     ipam:
       driver: default
-      config: "192.168.92.0/24"
+      config: 
+        - subnet: "192.168.92.0/24"
