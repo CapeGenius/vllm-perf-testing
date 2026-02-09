@@ -6,11 +6,16 @@ services:
     networks: 
       logger_net:
         ipv4_address: "192.168.92.20"
-    restart: unless-stopped
+    restart: no
     depends_on:
       - fluent-bit 
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
+
+
   fluent-bit:
     image: fluent/fluent-bit
+    command: ["fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.yaml"]
     volumes: 
       - ./fluent-bit.yaml:/fluent-bit/etc/fluent-bit.yaml
       - ./parsers.yaml:/fluent-bit/etc/parsers.yaml
@@ -18,6 +23,8 @@ services:
     networks: 
       logger_net:
         ipv4_address: "192.168.92.21"
+
+
 networks: 
   logger_net:
     ipam:
