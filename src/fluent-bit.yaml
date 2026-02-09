@@ -1,0 +1,17 @@
+service:
+  daemon: on
+  flush: 1
+  http_listen: 0.0.0.0
+  http_port: 9880
+  parsers_file: parsers.yaml 
+
+pipeline:
+  inputs: 
+    - name: http
+    - tag_key:  vllm
+    - port: 9880
+
+  outputs:
+    - name: file
+    - match: '*'
+    - path: vllm.log
