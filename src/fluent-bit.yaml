@@ -8,7 +8,7 @@ service:
 pipeline:
   inputs: 
     - name: http
-    - tag_key:  vllm
+    - tag:  vllm
     - port: 9880
 
   outputs:
