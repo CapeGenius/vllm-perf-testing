@@ -4,6 +4,7 @@ import json
 import numpy as np
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -100,5 +101,22 @@ def create_event():
     send_event(response)
 
 
+def send_multiple_requests(interval: int = 10, num_requests: int = 5):
+    """
+    send_multiple_requests sends multiple requests every n seconds, defined by variable interval,
+    and will be sent num_request times
+
+    interval: int - period of time between requests
+    num_requests: int - number of requests
+    :type num_requests: int
+    """
+
+    for _ in range(num_requests):
+        asyncio.run(create_event())
+        time.sleep(interval)
+
+
 if __name__ == "__main__":
-    asyncio.run(create_event)
+    interval = os.getenv("interval")
+    num_requests = os.getenv("num_requests")
+    asyncio.run(send_multiple_requests(interval=interval, num_requests=num_requests))
