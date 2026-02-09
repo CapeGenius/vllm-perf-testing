@@ -69,7 +69,7 @@ def get_statistics(response):
     return vllm_request_metrics
 
 
-def send_to_fluentbit(metrics, host="fluentbit", port=9880, tag="vllm.metrics"):
+def send_to_fluentbit(metrics, host="fluentbit", port=9880, tag="vllm"):
     url = f"http://{host}:{port}/{tag}"
     r = requests.post(url, json=metrics, timeout=2)
     r.raise_for_status()
@@ -79,7 +79,7 @@ def send_event(response):
     # get environment variables
     host = os.getenv("host")
     port = os.getenv("port")
-    tag = os.getenv("vllm.metrics")
+    tag = os.getenv("tag")
 
     vllm_request_metrics = get_statistics(response)
     send_to_fluentbit(vllm_request_metrics, host=host, port=port, tag=tag)
