@@ -69,8 +69,7 @@ def get_statistics(response):
 
 
 def send_to_fluentbit(metrics, host="fluentbit", port=9880, tag="vllm.metrics"):
-    url = f"http://{host}:{port}/{tag}"  # FB http input accepts path as tag
-    # Fluent Bit likes JSON objects or arrays of objects
+    url = f"http://{host}:{port}/{tag}"
     r = requests.post(url, json=metrics, timeout=2)
     r.raise_for_status()
 
@@ -102,4 +101,4 @@ def create_event():
 
 
 if __name__ == "__main__":
-    asyncio.run(run_request)
+    asyncio.run(create_event)
