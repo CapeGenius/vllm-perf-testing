@@ -1,0 +1,25 @@
+version: 3.7
+services:
+  bench_test:
+    build: .
+    ports: "10000:80"
+    networks: 
+      logger_net:
+        "192.168.92.20"
+    restart: unless-stopped
+    depends_on:
+      - fluent-bit 
+  fluent-bit:
+    image: fluent/fluent-bit
+    volumes: 
+      - ./fluent-bit.yaml:/fluent-bit/etc/fluent-bit.yaml
+      - ./parsers.yaml:/fluent-bit/etc/parsers.yaml
+      - ./logger/vllm.log: vllm.log
+    networks: 
+      logger_net:
+        "192.168.92.35"
+  networks: 
+    logger_net:
+    ipam:
+      driver: default
+      config: "192.168.92.0/24"
