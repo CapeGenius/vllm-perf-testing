@@ -69,7 +69,7 @@ def get_statistics(response):
     return vllm_request_metrics
 
 
-def send_to_fluentbit(metrics, host="fluentbit", port=9880, tag="vllm"):
+def send_to_fluentbit(metrics, host="fluent-bit", port=9880, tag="vllm"):
     url = f"http://{host}:{port}/{tag}"
     r = requests.post(url, json=metrics, timeout=2)
     r.raise_for_status()
@@ -78,7 +78,7 @@ def send_to_fluentbit(metrics, host="fluentbit", port=9880, tag="vllm"):
 def send_event(response):
     # get environment variables
     host = os.getenv("host")
-    port = os.getenv("port")
+    port = int(os.getenv("port"))
     tag = os.getenv("tag")
 
     vllm_request_metrics = get_statistics(response)
@@ -89,13 +89,17 @@ def create_event():
     # get environment variables
     model = os.getenv("model")
     dataset = os.getenv("dataset")
-    max_tokens = os.getenv("max_tokens")
-    temperature = os.getenv("temperature")
+    max_tokens = int(os.getenv("max_tokens"))
+    temperature = float(os.getenv("temperature"))
 
     # runs the request
     response = run_request(
         model=model, dataset=dataset, max_tokens=max_tokens, temperature=temperature
     )
+
+    if response is None:
+        print("Request failed")
+        return None
 
     # gets the statistic from the response, creates an event, and then sends it to fluent bit
     send_event(response)
@@ -111,12 +115,13 @@ def send_multiple_requests(interval: int = 10, num_requests: int = 5):
     :type num_requests: int
     """
 
-    for _ in range(num_requests):
-        asyncio.run(create_event())
+    for _ in range(int(num_requests)):
+        print(f"number of requests {num_requests}")
+        create_event()
         time.sleep(interval)
 
 
 if __name__ == "__main__":
-    interval = os.getenv("interval")
-    num_requests = os.getenv("num_requests")
-    asyncio.run(send_multiple_requests(interval=interval, num_requests=num_requests))
+    interval = int(os.getenv("interval"))
+    num_requests = int(os.getenv("num_requests"))
+    send_multiple_requests(interval=interval, num_requests=num_requests)
