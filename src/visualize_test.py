@@ -49,7 +49,7 @@ plt.xlabel("Throughput (tokens/sec)")
 plt.ylabel("End-to-End Latency (s)")
 plt.title("Throughput vs End-to-End Latency")
 plt.figtext(
-    0.5, 0.01, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
 )
 plt.show()
 
@@ -62,7 +62,7 @@ plt.ylabel("Decode Time (s)")
 plt.title("Prefill vs Decode Time")
 plt.show()
 plt.figtext(
-    0.5, 0.01, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
 )
 plt.savefig("plots/prefill_vs_decode.png", dpi=150, bbox_inches="tight")
 
@@ -73,6 +73,6 @@ plt.ylabel("Time to First Token (s)")
 plt.title("Average Inter-Token Latency vs Time to First Token")
 plt.show()
 plt.figtext(
-    0.5, 0.01, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
 )
 plt.savefig("plots/itl_vs_ttft.png", dpi=150, bbox_inches="tight")
