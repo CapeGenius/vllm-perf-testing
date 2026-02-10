@@ -2,6 +2,17 @@ import json
 import re
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# get env
+
+caption_note = os.getenv("caption")
+interval = int(os.getenv("interval"))
+num_requests = int(os.getenv("num_requests"))
+caption_txt = f"(Note: {caption_note}). arrival rate (requests/minute): {60 / interval}, number of requests: {num_requests}"
 
 log_file = "/logger/vllm.log"
 
@@ -37,6 +48,9 @@ plt.scatter(df["throughput"], df["e2e_latency"], alpha=0.6)
 plt.xlabel("Throughput (tokens/sec)")
 plt.ylabel("End-to-End Latency (s)")
 plt.title("Throughput vs End-to-End Latency")
+plt.figtext(
+    0.5, 0.01, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+)
 plt.show()
 
 plt.savefig("plots/throughput_vs_latency.png", dpi=150, bbox_inches="tight")
@@ -47,7 +61,9 @@ plt.xlabel("Prefill Time (s)")
 plt.ylabel("Decode Time (s)")
 plt.title("Prefill vs Decode Time")
 plt.show()
-
+plt.figtext(
+    0.5, 0.01, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+)
 plt.savefig("plots/prefill_vs_decode.png", dpi=150, bbox_inches="tight")
 
 plt.figure()
@@ -56,5 +72,7 @@ plt.xlabel("Average Inter-Token Latency (s)")
 plt.ylabel("Time to First Token (s)")
 plt.title("Average Inter-Token Latency vs Time to First Token")
 plt.show()
-
+plt.figtext(
+    0.5, 0.01, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+)
 plt.savefig("plots/itl_vs_ttft.png", dpi=150, bbox_inches="tight")
