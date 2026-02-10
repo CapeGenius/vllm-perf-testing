@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY . /app
 
+RUN mkdir -p /logger /plots && \
+    touch /logger/vllm.log
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8082
