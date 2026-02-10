@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.test
     ports: 
-      - "1000"
+      - "1000:1100"
     networks: 
       - logger_net
     restart: no
@@ -24,6 +24,22 @@ services:
     networks: 
       logger_net:
         ipv4_address: "192.168.92.21"
+
+  visualize-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.visualize
+    ports:
+      - "2000"
+    networks: 
+      - logger_net
+    restart: no
+    depends_on:
+      - bench_test:
+          condition: service_completed_successfully
+    volumes: 
+      - ./logger/vllm.log:/logger/vllm.log
+      - ./plots:/plots
 
 
 networks: 
