@@ -35,12 +35,11 @@ services:
       - logger_net
     restart: no
     depends_on:
-      - bench_test:
-          condition: service_completed_successfully
+      bench_test:
+          condition: "service_completed_successfully"
     volumes: 
       - ./logger/vllm.log:/logger/vllm.log
-      - ./plots:/plots
-
+      - ./plots:/app/plots
 
 networks: 
   logger_net:
