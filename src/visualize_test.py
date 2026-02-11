@@ -12,7 +12,8 @@ load_dotenv()
 caption_note = os.getenv("caption")
 interval = int(os.getenv("interval"))
 num_requests = int(os.getenv("num_requests"))
-caption_txt = f"(Note: {caption_note}). arrival rate (requests/minute): {60 / interval}, number of requests: {num_requests}"
+model = os.getenv("model")
+caption_txt = f"(Note: {caption_note}). model: {model}, arrival rate (requests/minute): {60 / interval}, number of requests: {num_requests}"
 
 log_file = "/logger/vllm.log"
 
