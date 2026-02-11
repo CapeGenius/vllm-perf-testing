@@ -9,11 +9,12 @@ load_dotenv()
 
 # get env
 
+dataset = os.getenv("dataset")
 caption_note = os.getenv("caption")
 interval = int(os.getenv("interval"))
 num_requests = int(os.getenv("num_requests"))
 model = os.getenv("model")
-caption_txt = f"(Note: {caption_note}). model: {model}, arrival rate (requests/minute): {60 / interval}, number of requests: {num_requests}"
+caption_txt = f"(Note: {caption_note}). dataset: {dataset}, model: {model}, arrival rate (requests/minute): {60 / interval}, number of requests: {num_requests}"
 
 log_file = "/logger/vllm.log"
 
@@ -50,7 +51,7 @@ plt.xlabel("Throughput (tokens/sec)")
 plt.ylabel("End-to-End Latency (s)")
 plt.title("Throughput vs End-to-End Latency")
 plt.figtext(
-    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=11
 )
 plt.show()
 
@@ -63,7 +64,7 @@ plt.ylabel("Decode Time (s)")
 plt.title("Prefill vs Decode Time")
 plt.show()
 plt.figtext(
-    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=11
 )
 plt.savefig("plots/prefill_vs_decode.png", dpi=150, bbox_inches="tight")
 
@@ -74,6 +75,6 @@ plt.ylabel("Time to First Token (s)")
 plt.title("Average Inter-Token Latency vs Time to First Token")
 plt.show()
 plt.figtext(
-    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=12
+    0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=11
 )
 plt.savefig("plots/itl_vs_ttft.png", dpi=150, bbox_inches="tight")
