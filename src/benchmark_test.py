@@ -5,6 +5,7 @@ import numpy as np
 import os
 from dotenv import load_dotenv
 import time
+import pandas as pd
 
 load_dotenv()
 
@@ -92,9 +93,15 @@ def create_event():
     max_tokens = int(os.getenv("max_tokens"))
     temperature = float(os.getenv("temperature"))
 
+    dataset = pd.read_csv(f"/app/src/datasets/{dataset}.csv")
+    random_prompt = dataset.sample()["prompt"]
+
     # runs the request
     response = run_request(
-        model=model, dataset=dataset, max_tokens=max_tokens, temperature=temperature
+        model=model,
+        dataset=random_prompt,
+        max_tokens=max_tokens,
+        temperature=temperature,
     )
 
     if response is None:
