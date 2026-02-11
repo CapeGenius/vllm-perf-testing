@@ -93,7 +93,7 @@ def create_event():
     max_tokens = int(os.getenv("max_tokens"))
     temperature = float(os.getenv("temperature"))
 
-    dataset = pd.read_csv(f"/app/src/datasets/{dataset}.csv")
+    dataset = pd.read_csv(f"/app/datasets/{dataset}.csv")
     random_prompt = dataset.sample()["prompt"]
 
     # runs the request
