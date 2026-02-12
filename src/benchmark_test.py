@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import time
 import pandas as pd
+import threading
 
 load_dotenv()
 
@@ -122,10 +123,19 @@ def send_multiple_requests(interval: int = 10, num_requests: int = 5):
     :type num_requests: int
     """
 
+    threads = []
+
     for _ in range(int(num_requests)):
         print(f"number of requests {num_requests}")
-        create_event()
+        t = threading.Thread(
+            target=create_event,
+        )
+        t.start()
+        threads.append(t)
         time.sleep(interval)
+
+    for t in threads:
+        t.join()
 
 
 if __name__ == "__main__":
