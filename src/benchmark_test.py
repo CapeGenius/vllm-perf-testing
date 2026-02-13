@@ -72,6 +72,7 @@ def get_statistics(response):
 
 
 def send_to_fluentbit(metrics, host="fluent-bit", port=9880, tag="vllm"):
+    print("sending to fluent-bit")
     url = f"http://{host}:{port}/{tag}"
     r = requests.post(url, json=metrics, timeout=2)
     r.raise_for_status()
@@ -113,7 +114,7 @@ def create_event():
     send_event(response)
 
 
-def send_multiple_requests(interval: int = 10, num_requests: int = 5):
+def send_multiple_requests(interval: float = 10, num_requests: int = 5):
     """
     send_multiple_requests sends multiple requests every n seconds, defined by variable interval,
     and will be sent num_request times
@@ -125,8 +126,8 @@ def send_multiple_requests(interval: int = 10, num_requests: int = 5):
 
     threads = []
 
-    for _ in range(int(num_requests)):
-        print(f"number of requests {num_requests}")
+    for i in range(int(num_requests)):
+        print(f"number of requests {i+1}/{num_requests}")
         t = threading.Thread(
             target=create_event,
         )
@@ -136,9 +137,10 @@ def send_multiple_requests(interval: int = 10, num_requests: int = 5):
 
     for t in threads:
         t.join()
+        print("finished execution")
 
 
 if __name__ == "__main__":
-    interval = int(os.getenv("interval"))
+    interval = float(os.getenv("interval"))
     num_requests = int(os.getenv("num_requests"))
     send_multiple_requests(interval=interval, num_requests=num_requests)
