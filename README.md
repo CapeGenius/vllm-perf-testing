@@ -55,3 +55,6 @@ Now that my fork of vLLM is running, you can set up my vLLM benchmarker, with th
 
 2. After properly configuring the sample.env, you can go into the `src` directory, and run `docker compose up`. The docker-compose file will create a multi container system that will set up fluent-bit, execute the tests with the containerized Python testers, generate the plots for those tests, and load them into the `src/plots`.
 
+- If you want to run more tests at once, you can simply run the command `docker compose up --scale=n`, where n is the number of containers that you want to build.
+- Each time you change a parameter on the test, I recommend running `docker compose up --scale=n --build`. 
+
