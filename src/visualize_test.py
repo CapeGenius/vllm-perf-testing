@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from dotenv import load_dotenv
+import shutil
 
 load_dotenv()
 
@@ -11,12 +12,14 @@ load_dotenv()
 
 dataset = os.getenv("dataset")
 caption_note = os.getenv("caption")
-interval = int(os.getenv("interval"))
+interval = float(os.getenv("interval"))
 num_requests = int(os.getenv("num_requests"))
 model = os.getenv("model")
+model_name = os.getenv("model_name")
 caption_txt = f"(Note: {caption_note}). dataset: {dataset}, model: {model}, arrival rate (requests/minute): {60 / interval}, number of requests: {num_requests}"
 
 log_file = "/logger/vllm.log"
+new_log_dest = f"/logger/{model_name}_{dataset}_{ 60 / interval}_{num_requests}.log"
 
 rows = []
 
@@ -55,7 +58,11 @@ plt.figtext(
 )
 plt.show()
 
-plt.savefig("plots/throughput_vs_latency.png", dpi=150, bbox_inches="tight")
+plt.savefig(
+    f"/plots/{model_name}_{dataset}_{60/ interval}_{num_requests}_throughput_vs_latency.png",
+    dpi=150,
+    bbox_inches="tight",
+)
 
 plt.figure()
 plt.scatter(df["prefill_time"], df["decode_time"], alpha=0.6)
@@ -66,7 +73,11 @@ plt.show()
 plt.figtext(
     0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=11
 )
-plt.savefig("plots/prefill_vs_decode.png", dpi=150, bbox_inches="tight")
+plt.savefig(
+    f"/plots/{model_name}_{dataset}_{60/ interval}_{num_requests}_prefill_vs_decode.png",
+    dpi=150,
+    bbox_inches="tight",
+)
 
 plt.figure()
 plt.scatter(df["average_itl"], df["time_to_first_token"], alpha=0.6)
@@ -77,4 +88,13 @@ plt.show()
 plt.figtext(
     0.5, -0.2, caption_txt, wrap=True, horizontalalignment="center", fontsize=11
 )
-plt.savefig("plots/itl_vs_ttft.png", dpi=150, bbox_inches="tight")
+plt.savefig(
+    f"/plots/{model_name}_{dataset}_{60/ interval}_{num_requests}_itl_vs_ttft.png",
+    dpi=150,
+    bbox_inches="tight",
+)
+
+shutil.copy2(log_file, new_log_dest)
+
+with open(log_file, "w"):
+    pass
